@@ -4,7 +4,7 @@ import { localizacaoSaga } from "../funcionalidades/cadastros/localizacao/Locali
 
 export default function* rootSaga() {
     yield all([
-        fork(funcionarioSaga),
-        fork(localizacaoSaga)
+        ...funcionarioSaga,
+        ...localizacaoSaga
     ]);
 }
