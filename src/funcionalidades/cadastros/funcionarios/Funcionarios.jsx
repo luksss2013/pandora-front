@@ -7,12 +7,12 @@ class Funcionarios extends React.Component {
     render() {
         const { columns, data } = this.props;
 
-        return(
+        return (
             <div>
                 <div style={{ textAlign: "right" }}>
-                <Link to='/novo'>
-                    <Button type="primary" icon="user-add" style={{ marginBottom: "15px" }}>Adicionar Funcionário</Button>
-                </Link>
+                    <Link to='/funcionario/novo'>
+                        <Button type="primary" icon="user-add" style={{ marginBottom: "15px" }}>Adicionar Funcionário</Button>
+                    </Link>
                 </div>
                 <Table columns={columns} dataSource={data} pagination={false} />
             </div>

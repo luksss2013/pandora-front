@@ -10,7 +10,6 @@ export const funcionarioSaga = [
 
 function* fetchFuncionarioRequest() {
     try {
-        // trigger request action
         yield put(fetchFuncionarios.request());
         // perform request to an API to fetch data
         const response = yield call(get, '/funcionario');

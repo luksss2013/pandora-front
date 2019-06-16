@@ -10,3 +10,4 @@ export const post = (resource, values) => {
         data: values
     });
 }
+export const update = (resource, values) => axios.put(apiUrl + resource, values);

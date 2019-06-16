@@ -10,16 +10,8 @@ import {
     SubmitButton
 } from "@jbuschke/formik-antd";
 import styled from 'styled-components';
-import { createLocalizacaoTrigger, changeModal } from '../LocalizacaoActions';
+import { updateLocalizacaoTrigger, changeModal } from '../LocalizacaoActions';
 import { bindActionCreators } from 'redux';
-
-const initialState = {
-    cep: '',
-    cidade: '',
-    estado: '',
-    logradouro: '',
-    telefone: ''
-};
 
 const Titulo = styled.h2`
   text-align: center;
@@ -83,33 +75,25 @@ const localizacaoSchema = yup.object().shape({
 });
 
 
-class NovaLocalizacao extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
+class EditaLocalizacao extends PureComponent {
     submitForm = (values) => {
-        this.props.createLocalizacaoTrigger(values);
-    }
-
-    closeModal = () => {
-        this.props.changeModal({ isCreateOpen: false });
+        this.props.updateLocalizacaoTrigger(values);
     }
 
     render() {
-        const { isOpen } = this.props;
+        const { changeModal, isOpen, localizacao } = this.props;
 
         return (
             <Modal
                 isOpen={isOpen}
                 style={customStyles}
             >
-                <Titulo>Cadastro de localizações</Titulo>
+                <Titulo>Edição de localizações</Titulo>
                 <Descricao>Para automatizarmos o pagamento, precisamos saber os endereços de sua empresa.</Descricao>
 
                 <FormContainer>
                     <Formik
-                        initialValues={initialState}
+                        initialValues={localizacao}
                         validationSchema={localizacaoSchema}
                     >
                         {({ values, setFieldValue }) => (
@@ -134,20 +118,20 @@ class NovaLocalizacao extends PureComponent {
                                     <Divider />
                                     <ButtonDiv>
                                         <Button
-                                            onClick={() => this.closeModal()}
+                                            onClick={() => changeModal(false)}
                                             size="large"
                                             type="danger"
                                             style={{ width: '45%', marginRight: '10%' }}>
                                             Cancelar
-                                        </Button>
+                                            </Button>
 
                                         <SubmitButton
                                             onClick={() => this.submitForm(values)}
                                             type="primary"
                                             size="large"
                                             style={{ width: '45%' }}>
-                                            Cadastrar
-                                        </SubmitButton>
+                                            Atualizar
+                                            </SubmitButton>
                                     </ButtonDiv>
 
                                 </div>
@@ -165,14 +149,14 @@ class NovaLocalizacao extends PureComponent {
 const mapStateToProps = (state) => {
     return {
         localizacao: state.localizacaoReducer.localizacao,
-        isOpen: state.localizacaoReducer.modal.isCreateOpen
+        isOpen: state.localizacaoReducer.modal.isEditOpen
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         changeModal: bindActionCreators(changeModal, dispatch),
-        createLocalizacaoTrigger: bindActionCreators(createLocalizacaoTrigger, dispatch),
+        updateLocalizacaoTrigger: bindActionCreators(updateLocalizacaoTrigger, dispatch),
     }
 
 };
@@ -180,4 +164,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(NovaLocalizacao);
+)(EditaLocalizacao);

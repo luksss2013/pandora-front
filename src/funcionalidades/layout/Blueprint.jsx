@@ -3,8 +3,9 @@ import { Layout, Menu, Icon } from 'antd';
 import './style.css';
 import FuncionariosContainer from '../cadastros/funcionarios/FuncionariosContainer';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import NovoFuncionarioContainer from '../cadastros/funcionarios/novo/NovoFuncionarioContainer';
+import NovoFuncionario from '../cadastros/funcionarios/novo/NovoFuncionario';
 import LocalizacaoContainer from '../cadastros/localizacao/LocalizacaoContainer';
+import CalendarioPagamentoContainer from '../cadastros/calendario-pagamento/CalendarioPagamentoContainer';
 
 const {
   Header, Footer, Sider, Content,
@@ -25,15 +26,17 @@ class Blueprint extends React.Component {
 
               <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                 <Menu.Item key="1">
-                  <Link to='/novo'>
+                  <Link to='/pagamento/calendario'>
                     <Icon type="user" />
                     <span className="nav-text">nav 1</span>
                   </Link>
 
                 </Menu.Item>
                 <Menu.Item key="2">
-                  <Icon type="video-camera" />
-                  <span className="nav-text">nav 2</span>
+                  <Link to='/funcionario'>
+                    <Icon type="user" />
+                    <span className="nav-text">nav 1</span>
+                  </Link>
                 </Menu.Item>
                 <Menu.Item key="3">
                   <Icon type="upload" />
@@ -68,8 +71,8 @@ class Blueprint extends React.Component {
 
                   <Route exact path="/funcionario" component={FuncionariosContainer} />
                   <Route exact path="/" component={LocalizacaoContainer} />
-                  <Route exact path="/funcionario/novo" component={NovoFuncionarioContainer} />
-
+                  <Route exact path="/funcionario/novo" component={NovoFuncionario} />
+                  <Route exact path="/pagamento/calendario" component={CalendarioPagamentoContainer} />
 
                 </div>
               </Content>

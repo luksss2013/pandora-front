@@ -1,17 +1,16 @@
 import { takeLatest, put, call, take } from "redux-saga/effects";
-import { get, post } from '../../../services/api';
+import { get, post, update } from '../../../services/api';
 import {
     fetchLocalizacoes,
-    getLocalizacao,
-    createLocalizacao
+    updateLocalizacaoSuccess
 } from './LocalizacaoActions';
 import { message } from 'antd';
 
 export const localizacaoSaga = [
     takeLatest(fetchLocalizacoes.TRIGGER, fetchLocalizacaoRequest),
-    takeLatest(getLocalizacao.TRIGGER, getLocalizacaoRequest),
+    takeLatest('GET_LOCALIZACAO/TRIGGER', getLocalizacaoRequest),
     takeLatest('CREATE_LOCALIZACAO/TRIGGER', criarLocalizacaoRequest),
-
+    takeLatest('UPDATE_LOCALIZACAO/TRIGGER', updateLocalizacaoRequest),
 ]
 
 function* fetchLocalizacaoRequest() {
@@ -27,15 +26,14 @@ function* fetchLocalizacaoRequest() {
 }
 
 function* getLocalizacaoRequest(action) {
-    const { id } = action.payload;
+    const id = action.payload;
 
     try {
         const response = yield call(get, '/localizacao/' + id);
-        yield put(fetchLocalizacoes.success(response.data._embedded.localizacoes))
+        yield put({ type: 'GET_LOCALIZACAO/SUCCESS', payload: response.data })
+        yield put({ type: 'CHANGE_MODAL', payload: { isEditOpen: true } })
     } catch (error) {
-        yield put(fetchLocalizacoes.failure(error));
-    } finally {
-        yield put(fetchLocalizacoes.fulfill())
+        message.error('Ocorreu um erro ao buscar a localização')
     }
 }
 
@@ -44,12 +42,10 @@ function* criarLocalizacaoRequest(action) {
         yield call(post, '/localizacao', action.payload);
 
         yield put({
-            type: 'CREATE_LOCALIZACAO/SUCCESS'
-        })
-
-        yield put({
             type: 'CHANGE_MODAL',
-            payload: false
+            payload: {
+                isCreateOpen: false
+            }
         });
 
         yield call(fetchLocalizacaoRequest);
@@ -57,5 +53,25 @@ function* criarLocalizacaoRequest(action) {
         message.success('Endereço adicionado com sucesso !');
     } catch (error) {
         message.error('Ocorreu um erro na gravação');
+    }
+}
+
+function* updateLocalizacaoRequest(action) {
+    try {
+        const response = yield call(update, '/localizacao/' + action.payload.id, action.payload);
+
+        yield put({
+            type: 'CHANGE_MODAL',
+            payload: {
+                isEditOpen: false
+            }
+        });
+
+        yield put(updateLocalizacaoSuccess(response.data));
+
+        message.success('Localização alterada com sucesso');
+    } catch (error) {
+        console.log(error)
+        message.error('Erro ao alterar a localização');
     }
 }

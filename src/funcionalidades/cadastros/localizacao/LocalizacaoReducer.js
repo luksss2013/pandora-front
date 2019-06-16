@@ -1,10 +1,14 @@
 import { fetchLocalizacoes } from './LocalizacaoActions';
+import { getLocalizacao } from './LocalizacaoActions';
 
 const initialState = {
   localizacoes: [],
   isLoading: false,
   error: null,
-  isModalOpen: false
+  modal: {
+    isCreateOpen: false,
+    isEditOpen: false
+  }
 }
 
 const localizacaoReducer = (state = initialState, action) => {
@@ -29,23 +33,32 @@ const localizacaoReducer = (state = initialState, action) => {
         ...state,
         isLoading: false
       };
-    case fetchLocalizacoes.TRIGGER:
+    case 'GET_LOCALIZACAO/SUCCESS':
       return {
         ...state,
-        isLoading: true
-      };
-    case 'CREATE_LOCALIZACAO/TRIGGER':
+        localizacao: action.payload
+      }
+    case 'UPDATE_LOCALIZACAO/SUCCESS':
       return {
-        ...state
-      };
-    case 'CREATE_LOCALIZACAO/SUCCESS':
-      return {
-        ...state
-      };
+        ...state,
+        localizacoes: state.localizacoes.map(localizacao => {
+
+          if (localizacao.id != action.payload.id) {
+            return localizacao
+          }
+
+          return {
+            ...localizacao,
+            ...action.payload
+          }
+        })
+      }
     case 'CHANGE_MODAL':
       return {
         ...state,
-        isModalOpen: action.payload
+        modal: {
+          ...action.payload
+        }
       }
     default:
       return state
