@@ -30,7 +30,7 @@
     "@jbuschke/formik-antd": "^0.13.0",
     "antd": "^3.16.6",
     "antd-mask-input": "^0.1.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "fetch-action-creator": "^2.0.3",
     "formik": "^1.5.4",
